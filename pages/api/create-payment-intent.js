@@ -42,8 +42,9 @@ export default async function handler(req, res) {
           currency: req.body.currency,
           customer: req.body.customerId,
           metadata: req.body.metadata,
+          // payment_method_types: ['card','us_bank_account'],
           description: req.body.description,
-          setup_future_usage: "off_session",
+          setup_future_usage: "on_session",
           automatic_payment_methods:{
             enabled: true,
           }
