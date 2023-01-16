@@ -47,6 +47,16 @@ const webhookHandler = async (req, res) => {
     await setDoc(logRef, event);
 
     switch (event.type) {
+      case 'payment_method.automatically_updated': {
+        const paymentMethod = event.data.object;
+        console.log(`Payment Method Automatically Updated: ${paymentMethod.status}`);
+        break;
+      }
+      case 'payment_method.updated': {
+        const paymentMethod = event.data.object;
+        console.log(`Payment Method Updated: ${paymentMethod.status}`);
+        break;
+      }
       case 'payment_intent.succeeded': {
         const paymentIntent = event.data.object;
         console.log(`PaymentIntent succeeded: ${paymentIntent.status}`);
