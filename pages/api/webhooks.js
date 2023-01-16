@@ -1,10 +1,12 @@
 import Stripe from 'stripe';
 import { buffer } from 'micro';
 import Cors from 'micro-cors';
+import { db } from '../../firebase-config';
+import { doc, setDoc } from 'firebase/firestore';
 
 const stripe = new Stripe(process.env.NEXT_PUBLIC_STRIPE_SECRET_KEY);
 
-const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
+const webhookSecret = process.env.NEXT_PUBLIC_STRIPE_WEBHOOK_SECRET;
 
 // Stripe requires the raw body to construct the event.
 export const config = {
@@ -38,11 +40,36 @@ const webhookHandler = async (req, res) => {
 
     // Successfully constructed event.
     console.log('✅ Success:', event.id);
+    const currentDate = new Date();
+    
+
+    const logRef = doc(db, "Log",currentDate.getTime().toString());
+    await setDoc(logRef, event);
 
     switch (event.type) {
       case 'payment_intent.succeeded': {
         const paymentIntent = event.data.object;
-        console.log(`PaymentIntent status: ${paymentIntent.status}`);
+        console.log(`PaymentIntent succeeded: ${paymentIntent.status}`);
+        break;
+      }
+      case 'payment_intent.created': {
+        const paymentIntent = event.data.object;
+        console.log(`PaymentIntent created: ${paymentIntent.status}`);
+        break;
+      }
+      case 'payment_intent.canceled': {
+        const paymentIntent = event.data.object;
+        console.log(`PaymentIntent canceled: ${paymentIntent.canceled}`);
+        break;
+      }
+      case 'payment_intent.processing': {
+        const paymentIntent = event.data.object;
+        console.log(`PaymentIntent processing: ${paymentIntent.processing}`);
+        break;
+      }
+      case 'payment_intent.requires_action': {
+        const paymentIntent = event.data.object;
+        console.log(`PaymentIntent requires_action: ${paymentIntent.requires_action}`);
         break;
       }
       case 'payment_intent.payment_failed': {
@@ -54,7 +81,22 @@ const webhookHandler = async (req, res) => {
       }
       case 'charge.succeeded': {
         const charge = event.data.object;
-        console.log(`Charge id: ${charge.id}`);
+        console.log(`Charge succeeded: ${charge.id}`);
+        break;
+      }
+      case 'charge.pending': {
+        const charge = event.data.object;
+        console.log(`Charge pending: ${charge.id}`);
+        break;
+      }
+      case 'charge.failed': {
+        const charge = event.data.object;
+        console.log(`Charge failed: ${charge.id}`);
+        break;
+      }
+      case 'charge.expired': {
+        const charge = event.data.object;
+        console.log(`Charge expired: ${charge.id}`);
         break;
       }
       default: {
