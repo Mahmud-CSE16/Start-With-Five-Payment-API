@@ -1,8 +1,27 @@
 import Head from 'next/head'
 import Image from 'next/image'
+import { useEffect } from 'react'
 import styles from '../styles/Home.module.css'
 
 export default function Home() {
+
+  // useEffect(() => {
+  //   fetch("https://smsplus.sslwireless.com/api/v3/send-sms", {
+  //     method: "POST",
+  //     headers: { "Content-Type": "application/json" },
+  //     body: JSON.stringify({
+  //       api_token: "",
+  //       sid: "",
+  //       msisdn: "+8801521404361",
+  //       sms: "Your otp is 7959",
+  //       csms_id: "7959"
+  //     }),
+  //   })
+  //   .then((res) => res.json())
+  //   .then((data) => console.log(data));
+  // }, [])
+  
+
   return (
     <div className={styles.container}>
       <Head>

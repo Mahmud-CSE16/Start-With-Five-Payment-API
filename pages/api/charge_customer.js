@@ -11,7 +11,7 @@ export default async function handler(req, res) {
       try {
         
         var param = {
-          amount: req.body.amount,
+          amount: parseInt(req.body.amount * 100),
           currency: req.body.currency,
           description: req.body.description,
           customer: req.body.customerId,
