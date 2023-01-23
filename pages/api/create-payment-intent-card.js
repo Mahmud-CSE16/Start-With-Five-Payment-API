@@ -31,10 +31,10 @@ export default async function handler(req, res) {
       // }
 
       //Creates a temporary secret key linked with the customer 
-      // const ephemeralKey = await stripe.ephemeralKeys.create(
-      //     { customer: customerId },
-      //     { apiVersion: '2020-08-27' }
-      // );
+      const ephemeralKey = await stripe.ephemeralKeys.create(
+          { customer: req.body.customerId },
+          { apiVersion: '2020-08-27' }
+      );
 
       //Creates a new payment intent with amount passed in from the client
       const paymentIntent = await stripe.paymentIntents.create({
@@ -52,9 +52,9 @@ export default async function handler(req, res) {
 
       res.status(200).send({
           clientSecret: paymentIntent.client_secret,
-          // ephemeralKey: ephemeralKey.secret,
-          // customer: customerId,
-          // success: true,
+          ephemeralKey: ephemeralKey.secret,
+          customer: req.body.customerId,
+          success: true,
       })
     } catch (err) {
       console.log(err.message)
