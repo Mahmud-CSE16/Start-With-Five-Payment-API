@@ -45,9 +45,9 @@ export default async function handler(req, res) {
           payment_method_types: ['card'], //us_bank_account
           description: req.body.description,
           setup_future_usage: "off_session",
-          automatic_payment_methods:{
-            enabled: true,
-          }
+          // automatic_payment_methods:{
+          //   enabled: true,
+          // }
       })
 
       res.status(200).send({
